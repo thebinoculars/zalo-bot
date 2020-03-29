@@ -5,7 +5,7 @@ const coronaAction = async (token, body) => {
   const reciever = body.user_id_by_app
   const res = await axios.get('https://corona.lmao.ninja/countries/Vietnam')
   const apiData = res.data
-  const message = `Tổng số ca mắc: ${apiData.cases}\n\nSố ca mắc trong ngày: ${apiData.todayCases}\n\nSố người chết: ${apiData.deaths}\n\nSố người chết trong ngày: ${apiData.todayDeaths}\n\nSố người đã bình phục: ${apiData.recovered}\n\nSố người đang điều trị: ${apiData.active}\n\nSố người trong tình trạng nguy kịch: ${apiData.critical}\n\nTỉ lệ mắc bệnh: ${apiData.casesPerOneMillion}/1000000`
+  const message = `Tổng số ca mắc: ${apiData.cases}\n\nSố ca mắc trong ngày: ${apiData.todayCases}\n\nSố người chết: ${apiData.deaths}\n\nSố người chết trong ngày: ${apiData.todayDeaths}\n\nSố người đã bình phục: ${apiData.recovered}\n\nSố người đang điều trị: ${apiData.active}\n\nSố người đang nguy kịch: ${apiData.critical}\n\nTỉ lệ mắc bệnh: ${apiData.casesPerOneMillion}/1.000.000`
 
   const data = await zalo.sendTextMessage(token, reciever, message)
   return data
