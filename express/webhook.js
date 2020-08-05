@@ -1,22 +1,19 @@
 const axios = require('axios')
 const zalo = require('./zalo')
 
-const coronaAction = async (token, body) => {
-  const reciever = body.user_id_by_app
-  const res = await axios.get('https://corona.lmao.ninja/countries/Vietnam')
-  const apiData = res.data
-  const message = `Tổng số ca mắc: ${apiData.cases}\n\nSố ca mắc trong ngày: ${apiData.todayCases}\n\nSố người chết: ${apiData.deaths}\n\nSố người chết trong ngày: ${apiData.todayDeaths}\n\nSố người đã bình phục: ${apiData.recovered}\n\nSố người đang điều trị: ${apiData.active}\n\nSố người đang nguy kịch: ${apiData.critical}\n\nTỉ lệ mắc bệnh: ${apiData.casesPerOneMillion}/1.000.000`
+const quoteAction = async (token, body) => {
+  const { data } = await axios.get(
+    'https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json'
+  )
 
-  const data = await zalo.sendTextMessage(token, reciever, message)
-  return data
+  return zalo.sendTextMessage(token, body.user_id_by_app, data.quoteText)
 }
 
 const methods = {
-  corona: 'Thông tin dịch Corona'
+  quote: 'Quote ngẫu nhiên'
 }
 
-const defaultAction = async (token, body) => {
-  const reciever = body.user_id_by_app
+const defaultAction = (token, body) => {
   const elements = [
     {
       title: 'Hero',
@@ -40,11 +37,10 @@ const defaultAction = async (token, body) => {
     })
   })
 
-  const data = await zalo.sendListMessage(token, reciever, elements)
-  return data
+  return zalo.sendListMessage(token, body.user_id_by_app, elements)
 }
 
 module.exports = {
-  coronaAction,
+  quoteAction,
   defaultAction
 }
