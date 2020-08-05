@@ -17,16 +17,14 @@ const router = express.Router()
 router.post('/webhook', async (req, res) => {
   const token = req.session.token || process.env.ZALO_ACCESS_TOKEN
   const body = req.body
-  const reciever = body.user_id_by_app
   if (body.event_name === 'user_send_text') {
     const key = `${body.message.text.replace('#', '')}Action`
     const action = webhook.hasOwnProperty(key) ? key : 'defaultAction'
     try {
-      const data = await webhook[action](token, body)
-      return res.json(data)
+      await webhook[action](token, body)
+      return res.json({ status: 'Success' })
     } catch (err) {
-      await zalo.sendTextMessage(token, reciever, 'Đã có lỗi xảy ra')
-      return res.json(err)
+      return res.json({ status: 'Failed' })
     }
   }
 
